@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Footer Section</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .footer {
+      background-color: #0b1543;  /* Dark navy */
+      color: #fff;
+      padding: 40px 0;
+      font-family: 'Arial', sans-serif;
+    }
+    .footer a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    .footer-logo img {
+      max-width: 180px;
+    }
+    .footer-links {
+      margin-top: 20px;
+    }
+    .footer-links ul {
+      list-style: none;
+      padding: 0;
+    }
+    .footer-links ul li {
+      margin-bottom: 8px;
+    }
+    .social-icons a {
+      font-size: 20px;
+      margin: 0 8px;
+      color: #fff;
+    }
+    .social-icons a:hover {
+      color: #00bfa5; /* teal hover */
+    }
+    .footer-bottom {
+      margin-top: 20px;
+      font-size: 14px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Footer Section -->
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <!-- Logo + Left Column -->
+      <div class="col-md-4 footer-logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Standard_Chartered.svg" alt="Standard Chartered Logo">
+        <div class="footer-links mt-3">
+          <ul>
+            <li><a href="#">Accessibility</a></li>
+            <li><a href="#">Cookie policy</a></li>
+            <li><a href="#">Terms of use</a></li>
+            <li><a href="#">Privacy policy</a></li>
+            <li><a href="#">Modern slavery statement</a></li>
+            <li><a href="#">Regulatory disclosures</a></li>
+            <li><a href="#">Straight2Bank onboarding portal</a></li>
+            <li><a href="#">Our Code of Conduct and Ethics</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="col-md-4 footer-links">
+        <ul>
+          <li><a href="#">Online security</a></li>
+          <li><a href="#">Fighting financial crime</a></li>
+          <li><a href="#">Our suppliers</a></li>
+          <li><a href="#">FAQs</a></li>
+          <li><a href="#">Our locations</a></li>
+          <li><a href="#">Contact us</a></li>
+          <li><a href="#">Sitemap</a></li>
+          <li><a href="#">Manage cookies</a></li>
+        </ul>
+      </div>
+
+      <!-- Social Icons -->
+      <div class="col-md-4 text-center d-flex flex-column justify-content-center">
+        <div class="social-icons mb-3">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-x-twitter"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+        <div class="footer-bottom">
+          <p>© Standard Chartered 2025.<br>All Rights Reserved.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
