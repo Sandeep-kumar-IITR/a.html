@@ -1,111 +1,42 @@
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.*;
-import java.io.FileOutputStream;
-import java.io.IOException;
+Sub LockAndProtectAllFormulaCells()
 
-public class PeakTestReportExcel {
+    Dim ws As Worksheet
+    Dim c As Range
 
-    public static void main(String[] args) throws IOException {
+    '?? Work on the sheet that is currently active
+    Set ws = ActiveSheet
 
-        XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet("Peak Test Results");
+    '1) Unprotect first (ignore error if not protected)
+    On Error Resume Next
+    ws.Unprotect Password:="1234"
+    On Error GoTo 0
 
-        int rowCount = 0;
+    '2) Unlock all cells
+    ws.Cells.Locked = False
+    ws.Cells.FormulaHidden = False
 
-        // === Header Style ===
-        Font headerFont = workbook.createFont();
-        headerFont.setBold(true);
-        headerFont.setFontHeightInPoints((short) 14);
+    '3) Lock + hide only cells that actually have formulas
+    For Each c In ws.UsedRange
+        If c.HasFormula Then
+            c.Locked = True
+            c.FormulaHidden = True
+        End If
+    Next c
 
-        CellStyle headerStyle = workbook.createCellStyle();
-        headerStyle.setFont(headerFont);
+    '4) Protect the sheet so locked cells cannot be edited
+    ws.Protect Password:="1234", _
+               DrawingObjects:=True, _
+               Contents:=True, _
+               Scenarios:=True, _
+               AllowFormattingCells:=True, _
+               AllowFormattingColumns:=True, _
+               AllowFormattingRows:=True
 
-        // === Section Header Style ===
-        Font sectionFont = workbook.createFont();
-        sectionFont.setBold(true);
-        sectionFont.setFontHeightInPoints((short) 12);
+    'Optional: user can only select unlocked cells
+    ws.EnableSelection = xlUnlockedCells
 
-        CellStyle sectionStyle = workbook.createCellStyle();
-        sectionStyle.setFont(sectionFont);
+    MsgBox "Done: all formula cells are now uneditable.", vbInformation
 
-        // === Table Header Style ===
-        CellStyle tableHeader = workbook.createCellStyle();
-        Font tableFont = workbook.createFont();
-        tableFont.setBold(true);
-        tableHeader.setFont(tableFont);
-        tableHeader.setBorderBottom(BorderStyle.THIN);
-        tableHeader.setBorderTop(BorderStyle.THIN);
-        tableHeader.setBorderLeft(BorderStyle.THIN);
-        tableHeader.setBorderRight(BorderStyle.THIN);
+End Sub
 
-        // === Table Cell Style ===
-        CellStyle tableCell = workbook.createCellStyle();
-        tableCell.setBorderBottom(BorderStyle.THIN);
-        tableCell.setBorderTop(BorderStyle.THIN);
-        tableCell.setBorderLeft(BorderStyle.THIN);
-        tableCell.setBorderRight(BorderStyle.THIN);
 
-        // ************* Header Row *************
-        Row title = sheet.createRow(rowCount++);
-        title.setHeightInPoints(28); // Bigger cell size
-        Cell tCell = title.createCell(0);
-        tCell.setCellValue("6.1. 7.1 Peak Test Results");
-        tCell.setCellStyle(headerStyle);
-
-        // Merge across 4 columns (0 to 3)
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 3));
-
-        // ************* Sub Header *************
-        Row sub = sheet.createRow(rowCount++);
-        sub.setHeightInPoints(22);
-        Cell subCell = sub.createCell(0);
-        subCell.setCellValue("7.1.1 Peak Test –");
-        subCell.setCellStyle(sectionStyle);
-        sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, 3));
-
-        // ************* Bullet Points *************
-        sheet.createRow(rowCount++).createCell(0)
-                .setCellValue("• Processing time for 600 transactions file is ~8 seconds (it is within the SLA of 5 min).");
-
-        // ************* Table Title *************
-        Row tradeTitle = sheet.createRow(rowCount++);
-        tradeTitle.setHeightInPoints(20);
-        Cell tradeCell = tradeTitle.createCell(0);
-        tradeCell.setCellValue("Trade – SLA 5 Mins");
-        tradeCell.setCellStyle(sectionStyle);
-        sheet.addMergedRegion(new CellRangeAddress(rowCount - 1, rowCount - 1, 0, 3));
-
-        // ************* Table Header *************
-        Row header = sheet.createRow(rowCount++);
-        String[] columns = {"UMI", "RECEIVEDDATE", "DELIVEREDDATE", "Duration"};
-
-        for (int i = 0; i < columns.length; i++) {
-            Cell cell = header.createCell(i);
-            cell.setCellValue(columns[i]);
-            cell.setCellStyle(tableHeader);
-        }
-
-        // ************* Table Data *************
-        Row data = sheet.createRow(rowCount++);
-        String[] val = {"20251117PTSanityn99000004", "17-NOV-25 12.32.34 PM", "17-NOV-25 12.32.42 PM", "8 Sec"};
-
-        for (int i = 0; i < val.length; i++) {
-            Cell cell = data.createCell(i);
-            cell.setCellValue(val[i]);
-            cell.setCellStyle(tableCell);
-        }
-
-        // === Auto Resize Columns ===
-        for (int i = 0; i < 4; i++) {
-            sheet.autoSizeColumn(i);
-        }
-
-        FileOutputStream fileOut = new FileOutputStream("Peak_Test_Report.xlsx");
-        workbook.write(fileOut);
-        workbook.close();
-        fileOut.close();
-
-        System.out.println("Excel Created Successfully with merged large header!");
-    }
-}
