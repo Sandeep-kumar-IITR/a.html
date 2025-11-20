@@ -1,21 +1,21 @@
-Sub LockFormulaCells_Sheet1()
+Sub LockFormulaCells()
 
     Dim ws As Worksheet
     Dim c As Range
 
-    '👉 Change the sheet name if different
+    '👉 change sheet name here if different
     Set ws = ThisWorkbook.Sheets("Sheet1")
 
-    'Unprotect (ignore error if not protected)
+    '🔓 Unprotect FIRST (required to avoid error)
     On Error Resume Next
     ws.Unprotect Password:="1234"
     On Error GoTo 0
 
-    'Unlock everything first
+    '🔓 Unlock whole sheet cells first
     ws.Cells.Locked = False
     ws.Cells.FormulaHidden = False
 
-    'Lock + hide formula cells only
+    '🔐 Lock only formula cells now
     For Each c In ws.UsedRange
         If c.HasFormula Then
             c.Locked = True
@@ -23,10 +23,13 @@ Sub LockFormulaCells_Sheet1()
         End If
     Next c
 
-    'Protect
-    ws.Protect Password:="1234"
+    '🔐 Protect AFTER locking
+    ws.Protect Password:="1234", _
+                DrawingObjects:=True, Contents:=True, Scenarios:=True
+
+    'Optional: allow selecting only editable cells
     ws.EnableSelection = xlUnlockedCells
 
-    MsgBox "Formula cells locked on Sheet1.", vbInformation
+    MsgBox "Formula cells are locked & uneditable!", vbInformation
 
 End Sub
