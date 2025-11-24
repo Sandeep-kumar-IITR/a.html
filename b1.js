@@ -1,4 +1,31 @@
-Sub LockFormulaCells()
+Private Sub Worksheet_Change(ByVal Target As Range)
+
+If Target.Address <> "$A$11" Then Exit Sub   ' Change here
+Application.EnableEvents = False
+
+ActiveSheet.Unprotect "123"       ' Sheet must be unprotected first
+
+If UCase(Range("A11").Value) = "CUSTOM" Then
+    Range("G1:L15").Locked = False
+    Range("G1:L15").EntireColumn.Hidden = False
+
+    Range("D5:E15").Locked = True
+    Range("D5:E15").EntireColumn.Hidden = True
+
+Else
+    Range("D5:E15").Locked = False
+    Range("D5:E15").EntireColumn.Hidden = False
+
+    Range("G1:L15").Locked = True
+    Range("G1:L15").EntireColumn.Hidden = True
+End If
+
+ActiveSheet.Protect Password:="123", UserInterfaceOnly:=True  ' Reprotect
+
+Application.EnableEvents = True
+
+End Sub
+    Sub LockFormulaCells()
 
     Dim ws As Worksheet
     Dim c As Range
@@ -33,3 +60,4 @@ Sub LockFormulaCells()
     MsgBox "Formula cells are locked & uneditable!", vbInformation
 
 End Sub
+
