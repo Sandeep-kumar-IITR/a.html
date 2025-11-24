@@ -1,3 +1,11 @@
+public static Date convertUTCtoIST(Date utcDate) {
+    long istOffset = TimeZone.getTimeZone("Asia/Kolkata").getOffset(utcDate.getTime());
+    long utcOffset = TimeZone.getTimeZone("UTC").getOffset(utcDate.getTime());
+    return new Date(utcDate.getTime() + (istOffset - utcOffset));
+}
+
+
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -91,5 +99,6 @@ End Sub
     MsgBox "Formula cells are locked & uneditable!", vbInformation
 
 End Sub
+
 
 
