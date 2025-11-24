@@ -1,3 +1,34 @@
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
+public class TimeConversion {
+
+    public static String convertUTCtoIST(String utcDateTime) throws Exception {
+        
+        // Input pattern (same format as your source)
+        SimpleDateFormat sourceFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sourceFormat.setTimeZone(TimeZone.getTimeZone("UTC"));  // incoming is UTC
+        
+        // Parse input string to Date
+        Date date = sourceFormat.parse(utcDateTime);
+
+        // Output pattern (IST format you want)
+        SimpleDateFormat destFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        destFormat.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata")); // change to IST
+        
+        // Convert and return
+        return destFormat.format(date);
+    }
+
+    public static void main(String[] args) throws Exception {
+        String utcInput = "2025-11-24 10:15:00";  // example input
+        System.out.println("IST Time = " + convertUTCtoIST(utcInput));
+    }
+}
+
+
+
 Private Sub Worksheet_Change(ByVal Target As Range)
 
 If Target.Address <> "$A$11" Then Exit Sub   ' Change here
@@ -60,4 +91,5 @@ End Sub
     MsgBox "Formula cells are locked & uneditable!", vbInformation
 
 End Sub
+
 
